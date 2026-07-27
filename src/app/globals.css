@@ -1,0 +1,44 @@
+@import "tailwindcss";
+
+/*
+ * Paleta de la posada. La tablet de recepción está siempre encendida y a la
+ * vista del huésped, así que el sistema usa un único tema claro y cálido
+ * en lugar de seguir el modo oscuro del dispositivo.
+ */
+@theme {
+  --color-crema: #faf7f1;
+  --color-arena: #eee5d6;
+  --color-arena-oscura: #d9cbb3;
+  --color-bosque: #1e3a32;
+  --color-bosque-claro: #2f5a4d;
+  --color-oro: #b8893f;
+  --color-oro-claro: #d8b877;
+  --color-tinta: #23211d;
+  --color-tinta-suave: #6b655c;
+  --color-alerta: #a1341f;
+
+  --font-sans: var(--font-geist-sans), system-ui, sans-serif;
+  --font-display: var(--font-fraunces), Georgia, serif;
+}
+
+html {
+  color-scheme: light;
+}
+
+body {
+  background-color: var(--color-crema);
+  color: var(--color-tinta);
+}
+
+/* En la tablet no queremos que un toque prolongado seleccione texto ni
+   que aparezca el resaltado azul del navegador. */
+.kiosco {
+  -webkit-tap-highlight-color: transparent;
+}
+
+.kiosco label,
+.kiosco h1,
+.kiosco h2,
+.kiosco p {
+  user-select: none;
+}
