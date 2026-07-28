@@ -126,10 +126,39 @@ src/
   Es una ventana en memoria: si algún día la app se despliega en varias
   instancias, conviene reemplazarlo por algo compartido.
 
-## Antes de poner en producción
+## Producción: Vercel + Supabase
+
+La app se despliega en **Vercel** y la base vive en **Supabase**.
+
+Supabase expone tres cadenas de conexión y **no sirve cualquiera**:
+
+| Uso | Cadena | Puerto |
+| --- | --- | --- |
+| La app en Vercel | Transaction pooler (Supavisor) | `6543` |
+| `npm run db:migrate` | Session pooler | `5432` |
+| — | Direct connection | Sólo IPv6, evitarla |
+
+El transaction pooler es el que aguanta que muchas instancias serverless se
+conecten a la vez, pero no mantiene estado entre consultas, así que las
+migraciones (que son DDL) van por el session pooler. La conexión directa
+requiere IPv6, que muchas redes domésticas no tienen.
+
+Correr las migraciones contra producción sin dejar la credencial en ningún
+archivo (PowerShell):
+
+```powershell
+$env:DATABASE_URL="<session pooler, puerto 5432>"; npm run db:migrate
+```
+
+### Checklist
 
 - [ ] Cambiar `ADMIN_PASSWORD` y generar un `SESSION_SECRET` nuevo.
-- [ ] Apuntar `DATABASE_URL` a la base de producción y correr `npm run db:migrate`.
-- [ ] Borrar los registros de prueba: `DELETE FROM check_ins;`
+- [ ] Correr las migraciones contra Supabase (session pooler).
+- [ ] Cargar las tres variables en Vercel **antes** del primer deploy: el
+      arranque valida `DATABASE_URL` y sin ella el build falla.
+- [ ] Verificar que `DATABASE_URL` en Vercel use el puerto `6543`.
 - [ ] Servir por HTTPS (la cookie de sesión usa `secure` en producción).
 - [ ] Dejar la tablet de recepción con el navegador en modo kiosco apuntando a `/`.
+
+Los registros de prueba están sólo en la base local, así que la de producción
+arranca vacía. Para limpiar la local: `DELETE FROM check_ins;`

@@ -18,8 +18,8 @@ const pool =
     connectionString: process.env.DATABASE_URL,
     // En serverless cada instancia levanta su propio pool y todas comparten el
     // límite de conexiones de la base, así que conviene abrir pocas por
-    // instancia y soltar rápido las ociosas. El pooling de verdad lo hace el
-    // endpoint `-pooler` de Neon.
+    // instancia y soltar rápido las ociosas. El pooling de verdad lo hace
+    // Supavisor: DATABASE_URL apunta al transaction pooler de Supabase (6543).
     max: 3,
     idleTimeoutMillis: 10_000,
     connectionTimeoutMillis: 10_000,
