@@ -17,6 +17,7 @@ import {
 } from "@/lib/fechas";
 
 import { salir } from "./acciones";
+import { ActualizacionEnVivo } from "./actualizacion-en-vivo";
 
 export const metadata = { title: "Panel interno — Posada del Ángel" };
 
@@ -71,9 +72,12 @@ export default async function PaginaAdmin({
             <p className="mb-1 text-xs font-medium tracking-[0.3em] text-oro uppercase">
               Posada del Ángel
             </p>
-            <h1 className="font-display text-3xl text-bosque">
-              Registros de huéspedes
-            </h1>
+            <div className="flex flex-wrap items-baseline gap-x-4 gap-y-1">
+              <h1 className="font-display text-3xl text-bosque">
+                Registros de huéspedes
+              </h1>
+              <ActualizacionEnVivo />
+            </div>
           </div>
 
           <div className="flex items-center gap-3">
