@@ -31,9 +31,14 @@ export function formatearFechaHora(momento: Date): string {
     .replace(",", "");
 }
 
-/** Noches entre dos fechas `YYYY-MM-DD`. */
-export function contarNoches(desde: string, hasta: string): number {
+/** Noches entre dos fechas `YYYY-MM-DD`, o `null` si falta alguna. */
+export function contarNoches(
+  desde: string | null,
+  hasta: string | null,
+): number | null {
+  if (!desde || !hasta) return null;
   const unDia = 24 * 60 * 60 * 1000;
-  const diferencia = Date.parse(`${hasta}T00:00:00Z`) - Date.parse(`${desde}T00:00:00Z`);
+  const diferencia =
+    Date.parse(`${hasta}T00:00:00Z`) - Date.parse(`${desde}T00:00:00Z`);
   return Math.max(0, Math.round(diferencia / unDia));
 }

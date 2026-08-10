@@ -15,9 +15,13 @@ export function filtroBusqueda(busqueda: string): SQL | undefined {
   if (!limpia) return undefined;
 
   const valor = patron(limpia);
+  // Las columnas son opcionales: `ilike` sobre NULL da NULL, que dentro del OR
+  // se comporta como "no coincide". No hace falta filtrar los nulos aparte.
   return or(
     ilike(checkIns.nombre, valor),
     ilike(checkIns.apellido, valor),
+    ilike(checkIns.documento, valor),
+    ilike(checkIns.pasaporte, valor),
     ilike(checkIns.email, valor),
     ilike(checkIns.telefono, valor),
     ilike(checkIns.ciudad, valor),

@@ -141,7 +141,7 @@ function Agradecimiento({
 
       <div className="space-y-2">
         <h2 className="font-display text-4xl text-bosque">
-          ¡Gracias, {nombre}!
+          {nombre ? `¡Gracias, ${nombre}!` : "¡Gracias!"}
         </h2>
         <p className="text-lg text-tinta-suave">
           Tu registro quedó guardado. Que disfrutes tu estadía en la posada.
@@ -201,7 +201,6 @@ function Panel({ hoy, onReiniciar }: { hoy: string; onReiniciar: () => void }) {
             id="nombre"
             name="nombre"
             type="text"
-            required
             defaultValue={valores.nombre ?? ""}
             autoComplete="off"
             aria-describedby={describe("nombre")}
@@ -215,12 +214,48 @@ function Panel({ hoy, onReiniciar }: { hoy: string; onReiniciar: () => void }) {
             id="apellido"
             name="apellido"
             type="text"
-            required
             defaultValue={valores.apellido ?? ""}
             autoComplete="off"
             aria-describedby={describe("apellido")}
             className={claseDe("apellido")}
             placeholder="González"
+          />
+        </Campo>
+
+        <Campo
+          etiqueta="Cédula o DNI"
+          htmlFor="documento"
+          error={errores.documento}
+        >
+          <input
+            id="documento"
+            name="documento"
+            type="text"
+            inputMode="numeric"
+            defaultValue={valores.documento ?? ""}
+            autoComplete="off"
+            spellCheck={false}
+            aria-describedby={describe("documento")}
+            className={claseDe("documento")}
+            placeholder="1.234.567-8"
+          />
+        </Campo>
+
+        <Campo
+          etiqueta="Pasaporte"
+          htmlFor="pasaporte"
+          error={errores.pasaporte}
+        >
+          <input
+            id="pasaporte"
+            name="pasaporte"
+            type="text"
+            defaultValue={valores.pasaporte ?? ""}
+            autoComplete="off"
+            spellCheck={false}
+            aria-describedby={describe("pasaporte")}
+            className={claseDe("pasaporte")}
+            placeholder="AB123456"
           />
         </Campo>
 
@@ -233,7 +268,6 @@ function Panel({ hoy, onReiniciar }: { hoy: string; onReiniciar: () => void }) {
             id="fechaCheckIn"
             name="fechaCheckIn"
             type="date"
-            required
             value={llegada}
             onChange={(evento) => setLlegada(evento.target.value)}
             aria-describedby={describe("fechaCheckIn")}
@@ -250,7 +284,6 @@ function Panel({ hoy, onReiniciar }: { hoy: string; onReiniciar: () => void }) {
             id="fechaCheckOut"
             name="fechaCheckOut"
             type="date"
-            required
             defaultValue={valores.fechaCheckOut ?? ""}
             min={llegada || hoy}
             aria-describedby={describe("fechaCheckOut")}
@@ -269,7 +302,6 @@ function Panel({ hoy, onReiniciar }: { hoy: string; onReiniciar: () => void }) {
             name="email"
             type="email"
             inputMode="email"
-            required
             defaultValue={valores.email ?? ""}
             autoComplete="off"
             spellCheck={false}
@@ -285,7 +317,6 @@ function Panel({ hoy, onReiniciar }: { hoy: string; onReiniciar: () => void }) {
             name="telefono"
             type="tel"
             inputMode="tel"
-            required
             defaultValue={valores.telefono ?? ""}
             autoComplete="off"
             aria-describedby={describe("telefono")}
@@ -307,7 +338,6 @@ function Panel({ hoy, onReiniciar }: { hoy: string; onReiniciar: () => void }) {
             key={intento}
             id="pais"
             name="pais"
-            required
             defaultValue={valores.pais ?? ""}
             aria-describedby={describe("pais")}
             className={claseDe("pais")}
@@ -334,7 +364,6 @@ function Panel({ hoy, onReiniciar }: { hoy: string; onReiniciar: () => void }) {
             id="ciudad"
             name="ciudad"
             type="text"
-            required
             defaultValue={valores.ciudad ?? ""}
             autoComplete="off"
             aria-describedby={describe("ciudad")}

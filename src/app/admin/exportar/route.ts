@@ -11,6 +11,8 @@ const COLUMNAS = [
   "Registrado",
   "Nombre",
   "Apellido",
+  "Cédula o DNI",
+  "Pasaporte",
   "Email",
   "Teléfono",
   "País",
@@ -20,6 +22,11 @@ const COLUMNAS = [
   "Noches",
   "Huéspedes",
 ] as const;
+
+/** Los datos son opcionales: lo que falta va como celda vacía, no como texto. */
+function oVacio(valor: string | number | null): string | number {
+  return valor ?? "";
+}
 
 const ARRANQUE_DE_FORMULA = /^[=@\t\r]/;
 const ARRANQUE_CON_SIGNO = /^[+-]/;
@@ -52,16 +59,18 @@ export async function GET(request: Request): Promise<Response> {
   const filas = registros.map((registro) =>
     [
       formatearFechaHora(registro.creadoEl),
-      registro.nombre,
-      registro.apellido,
-      registro.email,
-      registro.telefono,
-      registro.pais,
-      registro.ciudad,
-      formatearFecha(registro.fechaCheckIn),
-      formatearFecha(registro.fechaCheckOut),
-      contarNoches(registro.fechaCheckIn, registro.fechaCheckOut),
-      registro.cantidadHuespedes,
+      oVacio(registro.nombre),
+      oVacio(registro.apellido),
+      oVacio(registro.documento),
+      oVacio(registro.pasaporte),
+      oVacio(registro.email),
+      oVacio(registro.telefono),
+      oVacio(registro.pais),
+      oVacio(registro.ciudad),
+      registro.fechaCheckIn ? formatearFecha(registro.fechaCheckIn) : "",
+      registro.fechaCheckOut ? formatearFecha(registro.fechaCheckOut) : "",
+      oVacio(contarNoches(registro.fechaCheckIn, registro.fechaCheckOut)),
+      oVacio(registro.cantidadHuespedes),
     ]
       .map(celda)
       .join(";"),

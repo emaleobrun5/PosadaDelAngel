@@ -39,8 +39,9 @@ export default async function PaginaKiosco() {
           <h1 className="font-display text-4xl leading-tight text-bosque sm:text-5xl">
             Bienvenido
           </h1>
-          <p className="mx-auto mt-3 max-w-md text-lg text-tinta-suave">
-            Completá tus datos para registrar tu ingreso. Toma menos de un minuto.
+          <p className="mx-auto mt-3 max-w-lg text-lg text-tinta-suave">
+            Completá tus datos para registrar tu ingreso. Ningún campo es
+            obligatorio: cargá los que tengas a mano.
           </p>
         </header>
 

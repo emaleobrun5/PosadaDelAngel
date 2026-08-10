@@ -30,6 +30,15 @@ function Tarjeta({ titulo, valor }: { titulo: string; valor: number }) {
   );
 }
 
+/** Marca un dato que el huésped no completó, sin que la celda quede vacía. */
+function SinDato() {
+  return (
+    <span className="text-arena-oscura" title="Sin completar">
+      —
+    </span>
+  );
+}
+
 const CELDA = "px-4 py-3 align-top";
 const ENCABEZADO =
   "px-4 py-3 text-left text-xs font-semibold tracking-wide text-tinta-suave uppercase";
@@ -131,11 +140,12 @@ export default async function PaginaAdmin({
         </form>
 
         <div className="overflow-x-auto rounded-xl border border-arena-oscura bg-white">
-          <table className="w-full min-w-[64rem] border-collapse text-sm">
+          <table className="w-full min-w-[74rem] border-collapse text-sm">
             <thead className="border-b border-arena-oscura bg-arena/40">
               <tr>
                 <th className={ENCABEZADO}>Registrado</th>
                 <th className={ENCABEZADO}>Huésped</th>
+                <th className={ENCABEZADO}>Documento</th>
                 <th className={ENCABEZADO}>Contacto</th>
                 <th className={ENCABEZADO}>Procedencia</th>
                 <th className={ENCABEZADO}>Llegada</th>
@@ -148,7 +158,7 @@ export default async function PaginaAdmin({
               {registros.length === 0 ? (
                 <tr>
                   <td
-                    colSpan={8}
+                    colSpan={9}
                     className="px-4 py-16 text-center text-tinta-suave"
                   >
                     {busqueda
@@ -166,39 +176,81 @@ export default async function PaginaAdmin({
                       {formatearFechaHora(registro.creadoEl)}
                     </td>
                     <td className={`${CELDA} font-medium text-bosque`}>
-                      {registro.nombre} {registro.apellido}
+                      {[registro.nombre, registro.apellido]
+                        .filter(Boolean)
+                        .join(" ") || <SinDato />}
                     </td>
                     <td className={CELDA}>
-                      <a
-                        href={`mailto:${registro.email}`}
-                        className="block text-bosque-claro underline underline-offset-2"
-                      >
-                        {registro.email}
-                      </a>
-                      <a
-                        href={`tel:${registro.telefono.replace(/\s/g, "")}`}
-                        className="block text-tinta-suave"
-                      >
-                        {registro.telefono}
-                      </a>
+                      {registro.documento || registro.pasaporte ? (
+                        <>
+                          {registro.documento ? (
+                            <span className="block tabular-nums">
+                              {registro.documento}
+                            </span>
+                          ) : null}
+                          {registro.pasaporte ? (
+                            <span className="block text-tinta-suave">
+                              Pas. {registro.pasaporte}
+                            </span>
+                          ) : null}
+                        </>
+                      ) : (
+                        <SinDato />
+                      )}
                     </td>
                     <td className={CELDA}>
-                      {registro.ciudad}
-                      <span className="block text-tinta-suave">
-                        {registro.pais}
-                      </span>
+                      {registro.email ? (
+                        <a
+                          href={`mailto:${registro.email}`}
+                          className="block text-bosque-claro underline underline-offset-2"
+                        >
+                          {registro.email}
+                        </a>
+                      ) : null}
+                      {registro.telefono ? (
+                        <a
+                          href={`tel:${registro.telefono.replace(/\s/g, "")}`}
+                          className="block text-tinta-suave"
+                        >
+                          {registro.telefono}
+                        </a>
+                      ) : null}
+                      {!registro.email && !registro.telefono ? <SinDato /> : null}
+                    </td>
+                    <td className={CELDA}>
+                      {registro.ciudad || registro.pais ? (
+                        <>
+                          {registro.ciudad}
+                          <span className="block text-tinta-suave">
+                            {registro.pais}
+                          </span>
+                        </>
+                      ) : (
+                        <SinDato />
+                      )}
                     </td>
                     <td className={`${CELDA} whitespace-nowrap`}>
-                      {formatearFecha(registro.fechaCheckIn)}
+                      {registro.fechaCheckIn ? (
+                        formatearFecha(registro.fechaCheckIn)
+                      ) : (
+                        <SinDato />
+                      )}
                     </td>
                     <td className={`${CELDA} whitespace-nowrap`}>
-                      {formatearFecha(registro.fechaCheckOut)}
+                      {registro.fechaCheckOut ? (
+                        formatearFecha(registro.fechaCheckOut)
+                      ) : (
+                        <SinDato />
+                      )}
                     </td>
                     <td className={`${CELDA} tabular-nums`}>
-                      {contarNoches(registro.fechaCheckIn, registro.fechaCheckOut)}
+                      {contarNoches(
+                        registro.fechaCheckIn,
+                        registro.fechaCheckOut,
+                      ) ?? <SinDato />}
                     </td>
                     <td className={`${CELDA} tabular-nums`}>
-                      {registro.cantidadHuespedes}
+                      {registro.cantidadHuespedes ?? <SinDato />}
                     </td>
                   </tr>
                 ))

@@ -5,13 +5,15 @@ import { headers } from "next/headers";
 import { db } from "@/db";
 import { checkIns } from "@/db/schema";
 import { superoElLimite } from "@/lib/limite-envios";
-import { erroresPorCampo, esquemaCheckIn } from "@/lib/validacion";
+import { agruparErrores, esquemaCheckIn } from "@/lib/validacion";
 
 import type { EstadoFormulario, ValoresFormulario } from "./estado-check-in";
 
 const CAMPOS = [
   "nombre",
   "apellido",
+  "documento",
+  "pasaporte",
   "email",
   "telefono",
   "pais",
@@ -29,6 +31,11 @@ async function identificarCliente(): Promise<string> {
   );
 }
 
+/** La columna es opcional: lo que no se completó se guarda como NULL. */
+function oNulo<T>(valor: T | undefined): T | null {
+  return valor ?? null;
+}
+
 export async function registrarCheckIn(
   anterior: EstadoFormulario,
   datosFormulario: FormData,
@@ -42,12 +49,13 @@ export async function registrarCheckIn(
   const resultado = esquemaCheckIn.safeParse(valores);
 
   if (!resultado.success) {
+    const { errores, general } = agruparErrores(resultado.error);
     return {
       estado: "error",
       intento,
-      errores: erroresPorCampo(resultado.error),
+      errores,
       valores,
-      mensaje: "Revisá los campos marcados y volvé a enviar.",
+      mensaje: general ?? "Revisá los campos marcados y volvé a enviar.",
     };
   }
 
@@ -66,8 +74,17 @@ export async function registrarCheckIn(
 
   try {
     await db.insert(checkIns).values({
-      ...datos,
-      email: datos.email.toLowerCase(),
+      nombre: oNulo(datos.nombre),
+      apellido: oNulo(datos.apellido),
+      documento: oNulo(datos.documento),
+      pasaporte: oNulo(datos.pasaporte),
+      email: oNulo(datos.email?.toLowerCase()),
+      telefono: oNulo(datos.telefono),
+      pais: oNulo(datos.pais),
+      ciudad: oNulo(datos.ciudad),
+      fechaCheckIn: oNulo(datos.fechaCheckIn),
+      fechaCheckOut: oNulo(datos.fechaCheckOut),
+      cantidadHuespedes: oNulo(datos.cantidadHuespedes),
     });
   } catch (error) {
     console.error("No se pudo guardar el check-in", error);
@@ -81,5 +98,5 @@ export async function registrarCheckIn(
     };
   }
 
-  return { estado: "ok", nombre: datos.nombre };
+  return { estado: "ok", nombre: datos.nombre ?? "" };
 }
