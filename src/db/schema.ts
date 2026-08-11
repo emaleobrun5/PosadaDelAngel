@@ -26,6 +26,7 @@ export const checkIns = pgTable(
     id: uuid("id").primaryKey().defaultRandom(),
     nombre: text("nombre"),
     apellido: text("apellido"),
+    fechaNacimiento: date("fecha_nacimiento"),
     /** Cédula uruguaya o DNI, según de dónde venga el huésped. */
     documento: text("documento"),
     pasaporte: text("pasaporte"),

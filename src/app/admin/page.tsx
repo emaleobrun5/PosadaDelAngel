@@ -175,10 +175,17 @@ export default async function PaginaAdmin({
                     <td className={`${CELDA} whitespace-nowrap text-tinta-suave`}>
                       {formatearFechaHora(registro.creadoEl)}
                     </td>
-                    <td className={`${CELDA} font-medium text-bosque`}>
-                      {[registro.nombre, registro.apellido]
-                        .filter(Boolean)
-                        .join(" ") || <SinDato />}
+                    <td className={CELDA}>
+                      <span className="block font-medium text-bosque">
+                        {[registro.nombre, registro.apellido]
+                          .filter(Boolean)
+                          .join(" ") || <SinDato />}
+                      </span>
+                      {registro.fechaNacimiento ? (
+                        <span className="block text-tinta-suave">
+                          Nac. {formatearFecha(registro.fechaNacimiento)}
+                        </span>
+                      ) : null}
                     </td>
                     <td className={CELDA}>
                       {registro.documento || registro.pasaporte ? (

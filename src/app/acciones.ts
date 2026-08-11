@@ -12,6 +12,7 @@ import type { EstadoFormulario, ValoresFormulario } from "./estado-check-in";
 const CAMPOS = [
   "nombre",
   "apellido",
+  "fechaNacimiento",
   "documento",
   "pasaporte",
   "email",
@@ -76,6 +77,7 @@ export async function registrarCheckIn(
     await db.insert(checkIns).values({
       nombre: oNulo(datos.nombre),
       apellido: oNulo(datos.apellido),
+      fechaNacimiento: oNulo(datos.fechaNacimiento),
       documento: oNulo(datos.documento),
       pasaporte: oNulo(datos.pasaporte),
       email: oNulo(datos.email?.toLowerCase()),

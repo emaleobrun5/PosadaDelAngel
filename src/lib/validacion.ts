@@ -1,6 +1,10 @@
 import { z } from "zod";
 
+import { hoyEnLaPosada } from "./fechas";
 import { PAISES } from "./paises";
+
+/** Nadie que se registre en la posada nació antes de esto. */
+const NACIMIENTO_MAS_ANTIGUO = "1900-01-01";
 
 const FORMATO_FECHA = /^\d{4}-\d{2}-\d{2}$/;
 
@@ -44,6 +48,17 @@ export const esquemaCheckIn = z
   .object({
     nombre: opcional(z.string().max(60, "Máximo 60 caracteres")),
     apellido: opcional(z.string().max(60, "Máximo 60 caracteres")),
+    fechaNacimiento: opcional(
+      fecha
+        .refine(
+          (valor) => valor <= hoyEnLaPosada(),
+          "La fecha de nacimiento no puede ser futura",
+        )
+        .refine(
+          (valor) => valor >= NACIMIENTO_MAS_ANTIGUO,
+          "Revisá la fecha de nacimiento",
+        ),
+    ),
     documento: opcional(
       z
         .string()

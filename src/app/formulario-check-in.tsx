@@ -223,6 +223,22 @@ function Panel({ hoy, onReiniciar }: { hoy: string; onReiniciar: () => void }) {
         </Campo>
 
         <Campo
+          etiqueta="Fecha de nacimiento"
+          htmlFor="fechaNacimiento"
+          error={errores.fechaNacimiento}
+        >
+          <input
+            id="fechaNacimiento"
+            name="fechaNacimiento"
+            type="date"
+            defaultValue={valores.fechaNacimiento ?? ""}
+            max={hoy}
+            aria-describedby={describe("fechaNacimiento")}
+            className={claseDe("fechaNacimiento")}
+          />
+        </Campo>
+
+        <Campo
           etiqueta="Cédula o DNI"
           htmlFor="documento"
           error={errores.documento}
@@ -257,6 +273,14 @@ function Panel({ hoy, onReiniciar }: { hoy: string; onReiniciar: () => void }) {
             className={claseDe("pasaporte")}
             placeholder="AB123456"
           />
+        </Campo>
+
+        <Campo
+          etiqueta="Cantidad de huéspedes"
+          htmlFor="cantidadHuespedes"
+          error={errores.cantidadHuespedes}
+        >
+          <SelectorCantidad error={errores.cantidadHuespedes} />
         </Campo>
 
         <Campo
@@ -323,14 +347,6 @@ function Panel({ hoy, onReiniciar }: { hoy: string; onReiniciar: () => void }) {
             className={claseDe("telefono")}
             placeholder="+598 99 123 456"
           />
-        </Campo>
-
-        <Campo
-          etiqueta="Cantidad de huéspedes"
-          htmlFor="cantidadHuespedes"
-          error={errores.cantidadHuespedes}
-        >
-          <SelectorCantidad error={errores.cantidadHuespedes} />
         </Campo>
 
         <Campo etiqueta="País" htmlFor="pais" error={errores.pais}>

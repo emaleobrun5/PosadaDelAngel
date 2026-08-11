@@ -15,6 +15,13 @@
       "when": 1786392500073,
       "tag": "0001_conscious_nitro",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1786466091731,
+      "tag": "0002_complete_sentinel",
+      "breakpoints": true
     }
   ]
 }
