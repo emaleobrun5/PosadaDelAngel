@@ -1,4 +1,4 @@
-import { count, desc, ilike, or, sql, type SQL } from "drizzle-orm";
+import { count, desc, eq, ilike, or, sql, type SQL } from "drizzle-orm";
 
 import { db } from "@/db";
 import { checkIns, type CheckIn } from "@/db/schema";
@@ -27,6 +27,15 @@ export function filtroBusqueda(busqueda: string): SQL | undefined {
     ilike(checkIns.ciudad, valor),
     ilike(checkIns.pais, valor),
   );
+}
+
+export async function obtenerCheckIn(id: string): Promise<CheckIn | null> {
+  const [registro] = await db
+    .select()
+    .from(checkIns)
+    .where(eq(checkIns.id, id))
+    .limit(1);
+  return registro ?? null;
 }
 
 export async function contarCheckIns(filtro?: SQL): Promise<number> {

@@ -29,5 +29,3 @@ export type EstadoFormulario =
   | { estado: "ok"; nombre: string };
 
 export const ESTADO_INICIAL: EstadoFormulario = { estado: "inicial" };
-
-export const VALORES_VACIOS: ValoresFormulario = {};

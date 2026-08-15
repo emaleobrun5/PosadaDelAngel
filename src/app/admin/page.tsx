@@ -72,6 +72,13 @@ export default async function PaginaAdmin({
       ...(numero > 1 ? { pagina: String(numero) } : {}),
     })}`;
   const enlaceExportar = `/admin/exportar${busqueda ? `?q=${encodeURIComponent(busqueda)}` : ""}`;
+  // La edición vuelve a la misma búsqueda y página desde donde se abrió.
+  const contexto = new URLSearchParams({
+    ...(busqueda ? { q: busqueda } : {}),
+    ...(pagina > 1 ? { pagina: String(pagina) } : {}),
+  }).toString();
+  const enlaceEditar = (id: string) =>
+    `/admin/${id}${contexto ? `?${contexto}` : ""}`;
 
   return (
     <main className="flex-1 px-5 py-8 sm:px-8">
@@ -152,13 +159,16 @@ export default async function PaginaAdmin({
                 <th className={ENCABEZADO}>Salida</th>
                 <th className={ENCABEZADO}>Noches</th>
                 <th className={ENCABEZADO}>Huéspedes</th>
+                <th className={ENCABEZADO}>
+                  <span className="sr-only">Acciones</span>
+                </th>
               </tr>
             </thead>
             <tbody>
               {registros.length === 0 ? (
                 <tr>
                   <td
-                    colSpan={9}
+                    colSpan={10}
                     className="px-4 py-16 text-center text-tinta-suave"
                   >
                     {busqueda
@@ -258,6 +268,14 @@ export default async function PaginaAdmin({
                     </td>
                     <td className={`${CELDA} tabular-nums`}>
                       {registro.cantidadHuespedes ?? <SinDato />}
+                    </td>
+                    <td className={`${CELDA} whitespace-nowrap text-right`}>
+                      <Link
+                        href={enlaceEditar(registro.id)}
+                        className="rounded-lg border border-arena-oscura px-3 py-1.5 text-bosque transition hover:bg-arena"
+                      >
+                        Editar
+                      </Link>
                     </td>
                   </tr>
                 ))
